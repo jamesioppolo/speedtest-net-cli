@@ -1,4 +1,6 @@
-﻿using SpeedtestNetCli.Services;
+﻿using Autofac;
+using SpeedtestNetCli.Infrastructure;
+using SpeedtestNetCli.Services;
 
 namespace SpeedtestNetCli
 {
@@ -6,7 +8,8 @@ namespace SpeedtestNetCli
     {
         static void Main(string[] args)
         {
-            var retriever = new SpeedtestConfigurationRetriever();
+            var container = IocBuilder.Build();
+            var retriever = container.Resolve<SpeedtestConfigurationRetriever>();
             var doc = retriever.GetConfig().Result;
         }
     }
