@@ -1,0 +1,13 @@
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\obj\Debug\speedtest-net-cli-tests.csprojResolveAssemblyReference.cache
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\speedtest-net-cli-tests.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\speedtest-net-cli-tests.pdb
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\nunit.framework.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\Shouldly.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\speedtest-net-cli.exe
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\Autofac.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\speedtest-net-cli.pdb
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\nunit.framework.xml
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\bin\Debug\Autofac.xml
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\obj\Debug\speedtest-net-cli-tests.dll
+I:\Code\speedtest-net-cli\speedtest-net-cli-tests\obj\Debug\speedtest-net-cli-tests.pdb

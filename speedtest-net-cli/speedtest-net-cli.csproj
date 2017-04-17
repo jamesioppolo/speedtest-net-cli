@@ -54,6 +54,8 @@
     <Compile Include="Services\SpeedtestConfigurationRetriever.cs" />
     <Compile Include="Services\Speedtester.cs" />
     <Compile Include="Services\SpeedtestServerRetreiver.cs" />
+    <Compile Include="Utilities\Distance.cs" />
+    <Compile Include="Utilities\Location.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
