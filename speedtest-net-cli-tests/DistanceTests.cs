@@ -10,9 +10,9 @@ namespace SpeedtestNetCliTests
         [Test]
         public void TestDistance()
         {
-            var vicPark = new Location { Latitude = -32.5799, Longitude = 115.8975 };
-            var aarnet = new Location { Latitude = -31.9554, Longitude = 115.8585 };
-            Distance.Between(vicPark, aarnet).ShouldBe(69, 1);
+            var sampleLocation = new Location { Latitude = -32.5799, Longitude = 115.8975 };
+            var aarnetPerth = new Location { Latitude = -31.9554, Longitude = 115.8585 };
+            Distance.Between(sampleLocation, aarnetPerth).ShouldBe(69, 1);
         }
     }
 }
