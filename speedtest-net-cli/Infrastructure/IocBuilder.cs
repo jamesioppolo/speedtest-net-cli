@@ -19,8 +19,9 @@ namespace SpeedtestNetCli.Infrastructure
         {
             base.Load(builder);
 
-            builder.RegisterType<SpeedtestConfigurationRetriever>().AsSelf();
-            builder.RegisterType<SpeedtestServerRetriever>().AsSelf();
+            builder.RegisterType<Speedtester>().AsSelf();
+            builder.RegisterType<SpeedtestConfigurationRetriever>().AsImplementedInterfaces();
+            builder.RegisterType<SpeedtestServerRetriever>().AsImplementedInterfaces();
         }
     }
 }

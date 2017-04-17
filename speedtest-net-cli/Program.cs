@@ -9,11 +9,8 @@ namespace SpeedtestNetCli
         static void Main(string[] args)
         {
             var container = IocBuilder.Build();
-            var retriever = container.Resolve<SpeedtestConfigurationRetriever>();
-            var doc = retriever.GetConfig().Result;
-
-            var serverRetriever = container.Resolve<SpeedtestServerRetriever>();
-            var servers = serverRetriever.GetServers().Result;
+            var speedtester = container.Resolve<Speedtester>();
+            speedtester.Execute();
         }
     }
 }
