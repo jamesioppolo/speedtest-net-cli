@@ -1,3 +1,5 @@
 speedtest-net-cli/bin/
 speedtest-net-cli/obj/
 speedtest-net-cli/packages/
+speedtest-net-cli-tests/bin/
+speedtest-net-cli-tests/obj/
