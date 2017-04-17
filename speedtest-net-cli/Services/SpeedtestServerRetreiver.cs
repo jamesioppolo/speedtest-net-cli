@@ -7,16 +7,16 @@ using System.Xml;
 
 namespace SpeedtestNetCli.Services
 {
-    public interface ISpeedtestConfigurationRetriever
+    public interface ISpeedtestServerRetriever
     {
-        Task<XmlDocument> GetConfig();
+        Task<XmlDocument> GetServers();
     }
 
-    public class SpeedtestConfigurationRetriever : ISpeedtestConfigurationRetriever
+    public class SpeedtestServerRetriever : ISpeedtestServerRetriever
     {
         XmlDocument xmlDocument = new XmlDocument();
 
-        public async Task<XmlDocument> GetConfig()
+        public async Task<XmlDocument> GetServers()
         {
             var httpHandler = new HttpClientHandler()
             {
@@ -32,7 +32,7 @@ namespace SpeedtestNetCli.Services
                 client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue();
                 client.DefaultRequestHeaders.CacheControl.NoCache = true;
 
-                var response = await client.GetAsync("http://www.speedtest.net/speedtest-config.php?x=" + Guid.NewGuid().ToString());
+                var response = await client.GetAsync("http://c.speedtest.net/speedtest-servers-static.php");
                 xmlDocument.LoadXml(await response.Content.ReadAsStringAsync());
                 return xmlDocument;
             }

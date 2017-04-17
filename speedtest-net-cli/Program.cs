@@ -11,6 +11,9 @@ namespace SpeedtestNetCli
             var container = IocBuilder.Build();
             var retriever = container.Resolve<SpeedtestConfigurationRetriever>();
             var doc = retriever.GetConfig().Result;
+
+            var serverRetriever = container.Resolve<SpeedtestServerRetriever>();
+            var servers = serverRetriever.GetServers().Result;
         }
     }
 }
