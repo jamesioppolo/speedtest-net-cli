@@ -27,12 +27,16 @@ namespace SpeedtestNetCli.Services
             var config =  _speedtestConfigurationRetriever.GetConfig().Result;
             var servers = _speedtestServerRetriever.GetServers().Result;
 
-            var configXml = config.Descendants("client").First();
-            var currentLocation = GetServerLocation(configXml);
-            foreach (XElement server in servers.Descendants("server"))
+            var currentLocation = GetServerLocation(config.Descendants("client").First());
+            foreach (var server in servers.Descendants("server"))
             {
                 server.Add(new XAttribute("d", Distance.Between(currentLocation, GetServerLocation(server))));
             }
+
+            var closestFiveServers = (from node in servers.Descendants("server")
+                                      orderby Convert.ToDouble(node.Attribute("d").Value) ascending
+                                      select node).Take(5);
+             
         }
 
         private Location GetServerLocation(XElement node)
