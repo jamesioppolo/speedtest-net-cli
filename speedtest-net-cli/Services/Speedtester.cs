@@ -33,9 +33,9 @@ namespace SpeedtestNetCli.Services
                 server.Add(new XAttribute("clientDistance", Distance.Between(currentLocation, GetServerLocation(server))));
             }
 
-            var closestFiveServers = (from server in servers.Descendants("server")
-                                      orderby Convert.ToDouble(server.Attribute("clientDistance").Value) ascending
-                                      select server).Take(5);
+            var closestFiveServers = servers.Descendants("server")
+                                            .OrderBy(server => Convert.ToDouble(server.Attribute("clientDistance").Value))
+                                            .Take(5);
         }
 
         private Location GetServerLocation(XElement node)
