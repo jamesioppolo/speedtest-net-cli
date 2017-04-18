@@ -31,8 +31,7 @@ namespace SpeedtestNetCli.Services
             var currentLocation = GetServerLocation(configXml);
             foreach (XElement server in servers.Descendants("server"))
             {
-                var serverLocation = GetServerLocation(server);
-                var distanceToServer = Distance.Between(currentLocation, serverLocation);
+                server.Add(new XAttribute("d", Distance.Between(currentLocation, GetServerLocation(server))));
             }
         }
 
