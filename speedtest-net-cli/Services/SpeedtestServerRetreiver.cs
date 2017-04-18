@@ -1,22 +1,21 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace SpeedtestNetCli.Services
 {
     public interface ISpeedtestServerRetriever
     {
-        Task<XmlDocument> GetServers();
+        Task<XDocument> GetServers();
     }
 
     public class SpeedtestServerRetriever : ISpeedtestServerRetriever
     {
-        XmlDocument xmlDocument = new XmlDocument();
+        XDocument xmlDocument = new XDocument();
 
-        public async Task<XmlDocument> GetServers()
+        public async Task<XDocument> GetServers()
         {
             var httpHandler = new HttpClientHandler()
             {
@@ -33,7 +32,7 @@ namespace SpeedtestNetCli.Services
                 client.DefaultRequestHeaders.CacheControl.NoCache = true;
 
                 var response = await client.GetAsync("http://c.speedtest.net/speedtest-servers-static.php");
-                xmlDocument.LoadXml(await response.Content.ReadAsStringAsync());
+                xmlDocument = XDocument.Load(await response.Content.ReadAsStreamAsync());
                 return xmlDocument;
             }
         }

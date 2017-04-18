@@ -3,20 +3,20 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace SpeedtestNetCli.Services
 {
     public interface ISpeedtestConfigurationRetriever
     {
-        Task<XmlDocument> GetConfig();
+        Task<XDocument> GetConfig();
     }
 
     public class SpeedtestConfigurationRetriever : ISpeedtestConfigurationRetriever
     {
-        XmlDocument xmlDocument = new XmlDocument();
+        XDocument xmlDocument = new XDocument();
 
-        public async Task<XmlDocument> GetConfig()
+        public async Task<XDocument> GetConfig()
         {
             var httpHandler = new HttpClientHandler()
             {
@@ -33,7 +33,7 @@ namespace SpeedtestNetCli.Services
                 client.DefaultRequestHeaders.CacheControl.NoCache = true;
 
                 var response = await client.GetAsync("http://www.speedtest.net/speedtest-config.php?x=" + Guid.NewGuid().ToString());
-                xmlDocument.LoadXml(await response.Content.ReadAsStringAsync());
+                xmlDocument = XDocument.Load(await response.Content.ReadAsStreamAsync());
                 return xmlDocument;
             }
         }
