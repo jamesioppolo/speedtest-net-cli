@@ -24,27 +24,18 @@ namespace SpeedtestNetCli.Services
 
         public void Execute()
         {
-            var config =  _speedtestConfigurationRetriever.GetConfig().Result;
+            var client =  _speedtestConfigurationRetriever.GetConfig().Result;
             var servers = _speedtestServerRetriever.GetServers().Result;
 
-            var currentLocation = GetServerLocation(config.Descendants("client").First());
+            var clientLocation = new Location(client.Descendants("client").First());
             foreach (var server in servers.Descendants("server"))
             {
-                server.Add(new XAttribute("clientDistance", Distance.Between(currentLocation, GetServerLocation(server))));
+                server.Add(new XAttribute("clientDistance", clientLocation.DistanceTo(new Location(server))));
             }
 
             var closestFiveServers = servers.Descendants("server")
                                             .OrderBy(server => Convert.ToDouble(server.Attribute("clientDistance").Value))
                                             .Take(5);
-        }
-
-        private Location GetServerLocation(XElement node)
-        {
-            return new Location
-            {
-                Latitude = Convert.ToDouble(node.Attribute("lat").Value),
-                Longitude = Convert.ToDouble(node.Attribute("lon").Value)
-            };
         }
     }
 }
