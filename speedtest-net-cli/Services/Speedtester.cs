@@ -1,5 +1,6 @@
 ﻿using SpeedtestNetCli.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -36,18 +37,33 @@ namespace SpeedtestNetCli.Services
                 server.Add(new XAttribute("clientDistance", clientLocation.DistanceTo(new Location(server))));
             }
 
-            var closestFiveServers = servers.Descendants("server")
+            var closestServers = servers.Descendants("server")
                                             .OrderBy(server => Convert.ToDouble(server.Attribute("clientDistance").Value))
-                                            .Take(5);
+                                            .Take(5)
+                                            .ToList();
 
-            for (var latencyIteration = 0; latencyIteration < 3; latencyIteration++)
-            {
-                var latencyValue = PerformLatencyTest();
-            }
+            var bestServer = GetBestServerFrom(closestServers);
         }
 
-        private double PerformLatencyTest()
+        private XElement GetBestServerFrom(IList<XElement> closestServers)
         {
+            foreach (var server in closestServers)
+            {
+                var averageLatency = 0.0;
+                for (var latencyIteration = 0; latencyIteration < 3; latencyIteration++)
+                {
+                    averageLatency += DetermineLatencyTo(server.Attribute("url").Value)/3.0;
+                }
+                server.Add(new XAttribute("latency", averageLatency));
+            }
+
+            return closestServers.OrderBy(server => Convert.ToDouble(server.Attribute("latency").Value)).FirstOrDefault();
+        }
+
+        private double DetermineLatencyTo(string url)
+        {
+            var latencyAddress = url.Replace("upload.php", "latency.txt");
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -62,8 +78,10 @@ namespace SpeedtestNetCli.Services
                 {
                     var sw = new Stopwatch();
                     sw.Start();
-                    var response = client.GetAsync("http://rockingham.wa.speedtest.optusnet.com.au/speedtest/latency.txt").Result;
-                    return sw.ElapsedMilliseconds;
+                    var response = client.GetAsync(latencyAddress).Result;
+                    return response.IsSuccessStatusCode 
+                            ? sw.ElapsedMilliseconds 
+                            : 3600;
                 }
                 catch (HttpRequestException)
                 {
