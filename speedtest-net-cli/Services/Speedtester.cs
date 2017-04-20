@@ -50,7 +50,7 @@ namespace SpeedtestNetCli.Services
                 var averageLatency = 0.0;
                 for (var latencyIteration = 0; latencyIteration < 3; latencyIteration++)
                 {
-                    averageLatency += (double)DetermineLatencyTo(server.Attribute("host").Value)/3.0;
+                    averageLatency += DetermineLatencyTo(server.Attribute("host").Value)/3.0;
                 }
                 server.Add(new XAttribute("latency", averageLatency));
             }
