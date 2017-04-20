@@ -1,10 +1,8 @@
 ﻿using SpeedtestNetCli.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using System.Xml.Linq;
 
 namespace SpeedtestNetCli.Services
@@ -52,7 +50,7 @@ namespace SpeedtestNetCli.Services
                 var averageLatency = 0.0;
                 for (var latencyIteration = 0; latencyIteration < 3; latencyIteration++)
                 {
-                    averageLatency += DetermineLatencyTo(server.Attribute("url").Value)/3.0;
+                    averageLatency += (double)DetermineLatencyTo(server.Attribute("host").Value)/3.0;
                 }
                 server.Add(new XAttribute("latency", averageLatency));
             }
@@ -60,34 +58,19 @@ namespace SpeedtestNetCli.Services
             return closestServers.OrderBy(server => Convert.ToDouble(server.Attribute("latency").Value)).FirstOrDefault();
         }
 
-        private double DetermineLatencyTo(string url)
+        private long DetermineLatencyTo(string url)
         {
-            var latencyAddress = url.Replace("upload.php", "latency.txt");
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip, deflate, sdch");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
-                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.8");
-
-                client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue();
-                client.DefaultRequestHeaders.CacheControl.NoCache = true;
-
+            using (var pingTest = new Ping())
+            { 
                 try
                 {
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    var response = client.GetAsync(latencyAddress).Result;
-                    return response.IsSuccessStatusCode 
-                            ? sw.ElapsedMilliseconds 
-                            : 3600;
+                    var result = pingTest.SendPingAsync(new Uri($"http://{url}").Host, 3600).Result;
+                    return result.RoundtripTime;
                 }
-                catch (HttpRequestException)
+                catch (PingException)
                 {
                     return 3600;
                 }
-                
             }
         }
     }
