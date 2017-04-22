@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SpeedtestNetCli.Query;
 
@@ -27,20 +28,15 @@ namespace SpeedtestNetCli.Services
         {
             var bestServer = _bestServerDeterminer.GetBestServer().Result;
 
-            var imageUrl0 = bestServer.Attribute("url").Value.Replace("upload.php", "random750x750.jpg");
-            var imageUrl1 = bestServer.Attribute("url").Value.Replace("upload.php", "random1000x1000.jpg");
-            var imageUrl2 = bestServer.Attribute("url").Value.Replace("upload.php", "random1500x1500.jpg");
-            var imageUrl3 = bestServer.Attribute("url").Value.Replace("upload.php", "random2000x2000.jpg");
-            var imageUrl4 = bestServer.Attribute("url").Value.Replace("upload.php", "random2500x2500.jpg");
+            var imageSizes = new List<string> { "350", "500", "750", "1000", "1500", "2000", "2500", "3000" };
 
-            var tasks = new List<Task>
+            var imageUrls = new List<string>();
+            foreach (var imageSize in imageSizes)
             {
-                _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl0)),
-                _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl1)),
-                _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl2)),
-                _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl3)),
-                _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl4))
-            };
+                imageUrls.AddRange(Enumerable.Repeat(bestServer.Attribute("url").Value.Replace("upload.php", $"random{imageSize}x{imageSize}.jpg"), 4));
+            }
+
+            var tasks = imageUrls.Select(url => _httpQueryExecutor().Execute(new SpeedtestQuery(url))).Cast<Task>().ToList();
             Task.WaitAll(tasks.ToArray());
         }
     }
