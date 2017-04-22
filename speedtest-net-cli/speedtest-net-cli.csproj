@@ -60,6 +60,7 @@
     <Compile Include="Query\SpeedtestQuery.cs" />
     <Compile Include="Query\SpeedtestServerQuery.cs" />
     <Compile Include="Services\BestServerDeterminer.cs" />
+    <Compile Include="Services\DownloadSpeedTester.cs" />
     <Compile Include="Services\Speedtester.cs" />
     <Compile Include="Utilities\Location.cs" />
   </ItemGroup>
