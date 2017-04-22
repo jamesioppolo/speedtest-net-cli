@@ -1,4 +1,4 @@
-﻿using SpeedtestNetCli.Command;
+﻿using SpeedtestNetCli.Query;
 using SpeedtestNetCli.Utilities;
 using System;
 using System.Collections.Generic;
@@ -19,21 +19,17 @@ namespace SpeedtestNetCli.Services
 
     public class Speedtester : ISpeedtester
     {
-        private ISpeedtestServerRetriever _speedtestServerRetriever;
-        private IHttpQueryExecutor _httpExecutor;
+        private Func<IHttpQueryExecutor> _httpExecutor;
 
-        public Speedtester(ISpeedtestServerRetriever speedtestServerRetriever,
-            IHttpQueryExecutor httpExecutor)
+        public Speedtester(Func<IHttpQueryExecutor> httpExecutor)
         {
-            _speedtestServerRetriever = speedtestServerRetriever;
             _httpExecutor = httpExecutor;
         }
 
         public void Execute()
         {
-            var client = _httpExecutor.Execute(new SpeedtestConfigCommand()).Result;
-            var servers = _speedtestServerRetriever.GetServers().Result;
-
+            var client = _httpExecutor().Execute(new SpeedtestConfigQuery()).Result;
+            var servers = _httpExecutor().Execute(new SpeedtestServerQuery()).Result;
 
             var clientLocation = new Location(client.Descendants("client").First());
             foreach (var server in servers.Descendants("server"))
@@ -48,7 +44,7 @@ namespace SpeedtestNetCli.Services
 
             var bestServer = GetBestServerFrom(closestServers);
 
-            var randomImageUrl = bestServer.Attribute("url").Value.Replace("upload.php", "random2000x2000.jpg");
+            var imageUrl = bestServer.Attribute("url").Value.Replace("upload.php", "random2000x2000.jpg");
 
             var httpHandler = new HttpClientHandler()
             {
@@ -66,7 +62,7 @@ namespace SpeedtestNetCli.Services
 
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
-                var response = httpClient.GetAsync($"{randomImageUrl}?x={Guid.NewGuid().ToString()}").Result;
+                var response = httpClient.GetAsync($"{imageUrl}?x={Guid.NewGuid().ToString()}").Result;
                 stopWatch.Stop();
 
                 int length = int.Parse(response.Content.Headers.First(h => h.Key.Equals("Content-Length")).Value.First());

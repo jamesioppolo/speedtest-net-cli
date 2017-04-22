@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using SpeedtestNetCli.Command;
+using SpeedtestNetCli.Query;
 using SpeedtestNetCli.Services;
 
 namespace SpeedtestNetCli.Infrastructure
@@ -21,8 +21,6 @@ namespace SpeedtestNetCli.Infrastructure
             base.Load(builder);
 
             builder.RegisterType<Speedtester>().AsSelf();
-            builder.RegisterType<SpeedtestConfigurationRetriever>().AsImplementedInterfaces();
-            builder.RegisterType<SpeedtestServerRetriever>().AsImplementedInterfaces();
             builder.RegisterType<HttpQueryExecutor>().AsImplementedInterfaces();
         }
     }
