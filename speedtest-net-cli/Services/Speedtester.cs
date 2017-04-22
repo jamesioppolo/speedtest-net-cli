@@ -34,14 +34,7 @@ namespace SpeedtestNetCli.Services
 
         private double CalculateDownloadSpeed(XElement bestServer)
         {
-            var imageSizes = new List<string> { "350", "500", "750", "1000", "1500", "2000", "2500", "3000" };
-
-            var imageUrls = new List<string>();
-            foreach (var imageSize in imageSizes)
-            {
-                var imageUrl = bestServer.Attribute("url").Value.Replace("upload.php", $"random{imageSize}x{imageSize}.jpg");
-                imageUrls.AddRange(Enumerable.Repeat(imageUrl, 4));
-            }
+            var imageUrls = GetImageUrls(bestServer);
 
             var tasks = imageUrls.Select(url => _httpQueryExecutor().Execute(new SpeedtestQuery(url))).ToList();
 
@@ -51,6 +44,19 @@ namespace SpeedtestNetCli.Services
 
             var totalMegabitsDownloaded = tasks.Where(x => x.Status == TaskStatus.RanToCompletion).Sum(x => x.Result);
             return totalMegabitsDownloaded / (stopwatch.ElapsedMilliseconds / 1000.0);
+        }
+
+        private static IEnumerable<string> GetImageUrls(XElement bestServer)
+        {
+            var imageSizes = new List<string> {"350", "500", "750", "1000", "1500", "2000", "2500", "3000"};
+
+            var imageUrls = new List<string>();
+            foreach (var imageSize in imageSizes)
+            {
+                var imageUrl = bestServer.Attribute("url").Value.Replace("upload.php", $"random{imageSize}x{imageSize}.jpg");
+                imageUrls.AddRange(Enumerable.Repeat(imageUrl, 4));
+            }
+            return imageUrls;
         }
     }
 }
