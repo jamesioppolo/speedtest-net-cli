@@ -57,6 +57,7 @@
     <Compile Include="Infrastructure\IocBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\SpeedtestQuery.cs" />
     <Compile Include="Query\SpeedtestServerQuery.cs" />
     <Compile Include="Services\Speedtester.cs" />
     <Compile Include="Utilities\Location.cs" />
