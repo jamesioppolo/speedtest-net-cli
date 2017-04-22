@@ -9,18 +9,18 @@ namespace SpeedtestNetCli.Query
 {
     public class SpeedtestQuery : IHttpQuery<double>
     {
-        private string imageUrl;
+        private readonly string _imageUrl;
 
         public SpeedtestQuery(string imageUrl)
         {
-            this.imageUrl = imageUrl;
+            _imageUrl = imageUrl;
         }
 
         public async Task<double> Execute(HttpClient httpClient)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var response = await httpClient.GetAsync($"{imageUrl}?x={Guid.NewGuid().ToString()}");
+            var response = await httpClient.GetAsync($"{_imageUrl}?x={Guid.NewGuid().ToString()}");
             stopWatch.Stop();
 
             int length = int.Parse(response.Content.Headers.First(h => h.Key.Equals("Content-Length")).Value.First());
