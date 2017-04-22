@@ -23,7 +23,7 @@ namespace SpeedtestNetCli.Services
 
         public void Execute()
         {
-            var bestServer = _bestServerDeterminer.GetBestServer();
+            var bestServer = _bestServerDeterminer.GetBestServer().Result;
             var imageUrl = bestServer.Attribute("url").Value.Replace("upload.php", "random2000x2000.jpg");
             var downSpeed = _httpQueryExecutor().Execute(new SpeedtestQuery(imageUrl)).Result;
         }

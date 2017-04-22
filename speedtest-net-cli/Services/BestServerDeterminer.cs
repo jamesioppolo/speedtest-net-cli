@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using SpeedtestNetCli.Query;
 using SpeedtestNetCli.Utilities;
@@ -10,7 +12,7 @@ namespace SpeedtestNetCli.Services
 {
     public interface IBestServerDeterminer
     {
-        XElement GetBestServer();
+        Task<XElement> GetBestServer();
     }
 
     public class BestServerDeterminer : IBestServerDeterminer
@@ -22,10 +24,10 @@ namespace SpeedtestNetCli.Services
             _httpExecutor = httpExecutor;
         }
 
-        public XElement GetBestServer()
+        public async Task<XElement> GetBestServer()
         {
-            var client = _httpExecutor().Execute(new SpeedtestConfigQuery()).Result;
-            var servers = _httpExecutor().Execute(new SpeedtestServerQuery()).Result;
+            var client = await _httpExecutor().Execute(new SpeedtestConfigQuery());
+            var servers = await _httpExecutor().Execute(new SpeedtestServerQuery());
 
             var clientLocation = new Location(client.Descendants("client").First());
             foreach (var server in servers.Descendants("server"))
@@ -38,10 +40,10 @@ namespace SpeedtestNetCli.Services
                 .Take(5)
                 .ToList();
 
-            return GetBestServerFrom(closestServers);
+            return GetLowestLatencyServerFrom(closestServers);
         }
 
-        private XElement GetBestServerFrom(IList<XElement> closestServers)
+        private static XElement GetLowestLatencyServerFrom(IList<XElement> closestServers)
         {
             foreach (var server in closestServers)
             {
@@ -56,7 +58,7 @@ namespace SpeedtestNetCli.Services
             return closestServers.OrderBy(server => Convert.ToDouble(server.Attribute("latency").Value)).FirstOrDefault();
         }
 
-        private long DetermineLatencyTo(string url)
+        private static long DetermineLatencyTo(string url)
         {
             using (var pingTest = new Ping())
             {

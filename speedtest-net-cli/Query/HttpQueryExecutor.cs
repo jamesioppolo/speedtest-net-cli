@@ -19,7 +19,7 @@ namespace SpeedtestNetCli.Query
     {
         public async Task<T> Execute<T>(IHttpQuery<T> query)
         {
-            var httpHandler = new HttpClientHandler()
+            var httpHandler = new HttpClientHandler
             {
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             };
@@ -30,8 +30,7 @@ namespace SpeedtestNetCli.Query
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-US,en;q=0.8");
 
-                httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue();
-                httpClient.DefaultRequestHeaders.CacheControl.NoCache = true;
+                httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
                 return await query.Execute(httpClient);
             }

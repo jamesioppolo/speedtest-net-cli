@@ -9,7 +9,7 @@ namespace SpeedtestNetCli.Query
     {
         public async Task<XDocument> Execute(HttpClient client)
         {
-            var response = await client.GetAsync("http://www.speedtest.net/speedtest-config.php?x=" + Guid.NewGuid().ToString());
+            var response = await client.GetAsync("http://www.speedtest.net/speedtest-config.php?x=" + Guid.NewGuid());
             var xmlDocument = XDocument.Load(await response.Content.ReadAsStreamAsync());
             return xmlDocument;
         }
