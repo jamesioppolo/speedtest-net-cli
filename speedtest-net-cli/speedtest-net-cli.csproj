@@ -52,10 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\HttpExecutor.cs" />
+    <Compile Include="Command\SpeedtestConfigRetriever.cs" />
     <Compile Include="Infrastructure\IocBuilder.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\SpeedtestConfigurationRetriever.cs" />
     <Compile Include="Services\Speedtester.cs" />
     <Compile Include="Services\SpeedtestServerRetreiver.cs" />
     <Compile Include="Utilities\Location.cs" />

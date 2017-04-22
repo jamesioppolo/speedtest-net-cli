@@ -1,4 +1,5 @@
-﻿using SpeedtestNetCli.Utilities;
+﻿using SpeedtestNetCli.Command;
+using SpeedtestNetCli.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,20 +19,21 @@ namespace SpeedtestNetCli.Services
 
     public class Speedtester : ISpeedtester
     {
-        private ISpeedtestConfigurationRetriever _speedtestConfigurationRetriever;
         private ISpeedtestServerRetriever _speedtestServerRetriever;
+        private IHttpQueryExecutor _httpExecutor;
 
-        public Speedtester(ISpeedtestConfigurationRetriever speedtestConfigurationRetriever,
-            ISpeedtestServerRetriever speedtestServerRetriever)
+        public Speedtester(ISpeedtestServerRetriever speedtestServerRetriever,
+            IHttpQueryExecutor httpExecutor)
         {
-            _speedtestConfigurationRetriever = speedtestConfigurationRetriever;
             _speedtestServerRetriever = speedtestServerRetriever;
+            _httpExecutor = httpExecutor;
         }
 
         public void Execute()
         {
-            var client = _speedtestConfigurationRetriever.GetConfig().Result;
+            var client = _httpExecutor.Execute(new SpeedtestConfigCommand()).Result;
             var servers = _speedtestServerRetriever.GetServers().Result;
+
 
             var clientLocation = new Location(client.Descendants("client").First());
             foreach (var server in servers.Descendants("server"))
