@@ -4,13 +4,11 @@ using SpeedtestNetCli.Services;
 
 namespace SpeedtestNetCli
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var container = IocBuilder.Build();
-            var speedtester = container.Resolve<Speedtester>();
-            speedtester.Execute();
+            IocBuilder.Build().Resolve<Speedtester>().Execute();
         }
     }
 }
