@@ -24,6 +24,7 @@ namespace SpeedtestNetCli.Infrastructure
             builder.RegisterType<HttpQueryExecutor>().AsImplementedInterfaces();
             builder.RegisterType<BestServerDeterminer>().AsImplementedInterfaces();
             builder.RegisterType<DownloadSpeedTester>().AsImplementedInterfaces();
+            builder.RegisterType<UploadSpeedTester>().AsImplementedInterfaces();
 
         }
     }

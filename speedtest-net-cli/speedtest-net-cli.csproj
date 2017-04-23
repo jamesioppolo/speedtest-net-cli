@@ -62,6 +62,7 @@
     <Compile Include="Services\BestServerDeterminer.cs" />
     <Compile Include="Services\DownloadSpeedTester.cs" />
     <Compile Include="Services\Speedtester.cs" />
+    <Compile Include="Services\UploadSpeedTester.cs" />
     <Compile Include="Utilities\Location.cs" />
   </ItemGroup>
   <ItemGroup>
