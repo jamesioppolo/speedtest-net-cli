@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using log4net;
 using SpeedtestNetCli.Configuration;
 using SpeedtestNetCli.Infrastructure;
@@ -44,7 +45,9 @@ namespace SpeedtestNetCli.Services
                 var server = bestServer.Attribute("host").Value;
 
                 Log.Info($"{latency:N2} {downSpeedMbps:N2} {upSpeedMbps:N2} {server}");
+                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
             }
         }
+        
     }
 }

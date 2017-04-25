@@ -37,9 +37,10 @@ namespace SpeedtestNetCli.Services
 
         private static IEnumerable<string> GetImageUrls(XElement bestServer)
         {
-            var imageSizes = new List<string> {"350", "500", "750", "1000", "1500"};// "2000", "2500", "3000" };
+            var imageSizes = new List<string> {"1000", "2000" };
 
             var imageUrls = new List<string>();
+
             foreach (var imageSize in imageSizes)
             {
                 var imageUrl = bestServer.Attribute("url").Value.Replace("upload.php", $"random{imageSize}x{imageSize}.jpg");
