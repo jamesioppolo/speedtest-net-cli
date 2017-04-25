@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Shouldly;
-using SpeedtestNetCli.Utilities;
+using SpeedtestNetCli.Model;
 using System.Xml.Linq;
 
 namespace SpeedtestNetCliTests

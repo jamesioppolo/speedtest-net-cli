@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace SpeedtestNetCli.Utilities
+namespace SpeedtestNetCli.Model
 {
     public class Location
     {

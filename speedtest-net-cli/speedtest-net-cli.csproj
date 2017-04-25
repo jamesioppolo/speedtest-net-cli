@@ -68,7 +68,7 @@
     <Compile Include="Services\DownloadSpeedTester.cs" />
     <Compile Include="Services\Speedtester.cs" />
     <Compile Include="Services\UploadSpeedTester.cs" />
-    <Compile Include="Utilities\Location.cs" />
+    <Compile Include="Model\Location.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

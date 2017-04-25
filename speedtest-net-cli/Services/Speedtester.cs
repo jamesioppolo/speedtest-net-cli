@@ -44,7 +44,7 @@ namespace SpeedtestNetCli.Services
 
             var latencyInteger = Convert.ToDouble(bestServer.Attribute("latency").Value);
 
-            Log.Info($"{latencyInteger:0.#} {downSpeedMbps:0.##} {upSpeedMbps:0.##}");
+            Log.Info($"{latencyInteger:0.##} {downSpeedMbps:0.##} {upSpeedMbps:0.##}");
         }
     }
 }

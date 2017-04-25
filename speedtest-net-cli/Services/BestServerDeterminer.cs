@@ -5,7 +5,7 @@ using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using SpeedtestNetCli.Query;
-using SpeedtestNetCli.Utilities;
+using SpeedtestNetCli.Model;
 
 namespace SpeedtestNetCli.Services
 {
