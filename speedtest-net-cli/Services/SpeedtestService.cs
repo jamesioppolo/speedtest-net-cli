@@ -34,14 +34,17 @@ namespace SpeedtestNetCli.Services
 
         protected override void Run()
         {
-            var bestServer = _bestServerDeterminer.GetBestServer().Result;
-            var downSpeedMbps = _downloadSpeedTester.GetSpeedMbps(bestServer);
-            var upSpeedMbps = _uploadSpeedTester.GetSpeedMbps(bestServer);
+            while (true)
+            {
+                var bestServer = _bestServerDeterminer.GetBestServer().Result;
+                var downSpeedMbps = _downloadSpeedTester.GetSpeedMbps(bestServer);
+                var upSpeedMbps = _uploadSpeedTester.GetSpeedMbps(bestServer);
 
-            var latency = Convert.ToDouble(bestServer.Attribute("latency").Value);
-            var server = bestServer.Attribute("host").Value;
+                var latency = Convert.ToDouble(bestServer.Attribute("latency").Value);
+                var server = bestServer.Attribute("host").Value;
 
-            Log.Info($"{latency:N2} {downSpeedMbps:N2} {upSpeedMbps:N2} {server}");
+                Log.Info($"{latency:N2} {downSpeedMbps:N2} {upSpeedMbps:N2} {server}");
+            }
         }
     }
 }

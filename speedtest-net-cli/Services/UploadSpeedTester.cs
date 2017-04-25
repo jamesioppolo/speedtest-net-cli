@@ -27,7 +27,7 @@ namespace SpeedtestNetCli.Services
         {
             var payload = GetUploadTestPayload();
 
-            var numUploadThreads = 50;
+            var numUploadThreads = 25;
             var tasks = new List<Task>();
             for (var task = 0; task < numUploadThreads; task++)
                 tasks.Add(_httpQueryExecutor().Execute(new SpeedtestUploadQuery(server.Attribute("url").Value, payload)));
