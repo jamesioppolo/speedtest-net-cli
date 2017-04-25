@@ -37,6 +37,15 @@ namespace SpeedtestNetCli.Services
         {
             while (true)
             {
+                TryRunSpeedTest();
+                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
+            }
+        }
+
+        private void TryRunSpeedTest()
+        {
+            try
+            {
                 var bestServer = _bestServerDeterminer.GetBestServer().Result;
                 var downSpeedMbps = _downloadSpeedTester.GetSpeedMbps(bestServer);
                 var upSpeedMbps = _uploadSpeedTester.GetSpeedMbps(bestServer);
@@ -45,9 +54,12 @@ namespace SpeedtestNetCli.Services
                 var server = bestServer.Attribute("host").Value;
 
                 Log.Info($"{latency:N2} {downSpeedMbps:N2} {upSpeedMbps:N2} {server}");
-                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
             }
         }
-        
+
     }
 }
