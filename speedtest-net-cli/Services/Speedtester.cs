@@ -42,9 +42,10 @@ namespace SpeedtestNetCli.Services
             var downSpeedMbps = _downloadSpeedTester.GetSpeedMbps(bestServer);
             var upSpeedMbps = _uploadSpeedTester.GetSpeedMbps(bestServer);
 
-            var latencyInteger = Convert.ToDouble(bestServer.Attribute("latency").Value);
+            var latency = Convert.ToDouble(bestServer.Attribute("latency").Value);
+            var server = bestServer.Attribute("host").Value;
 
-            Log.Info($"{latencyInteger:0.##} {downSpeedMbps:0.##} {upSpeedMbps:0.##}");
+            Log.Info($"{latency:N2} {downSpeedMbps:N2} {upSpeedMbps:N2} {server}");
         }
     }
 }
