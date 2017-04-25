@@ -1,42 +1,38 @@
 ﻿using System;
-using System.Threading;
+using System.Threading.Tasks;
 using log4net;
+using SpeedtestNetCli.Configuration;
+using SpeedtestNetCli.Infrastructure;
 
 namespace SpeedtestNetCli.Services
 {
-    public interface ISpeedtester
+    public interface ISpeedtestService
     {
-        void Execute();
     }
 
-    public class Speedtester : ISpeedtester
+    public class SpeedtestService : ThreadedActionService, ISpeedtestService
     {
         private static readonly ILog Log = LogManager.GetLogger(string.Empty);
 
         private readonly IBestServerDeterminer _bestServerDeterminer;
         private readonly IDownloadSpeedTester _downloadSpeedTester;
         private readonly IUploadSpeedTester _uploadSpeedTester;
+        private readonly ISpeedtestConfigurationProvider _configurationProvider;
 
-        public Speedtester(
+        public SpeedtestService(
             IBestServerDeterminer bestServerDeterminer,
             IDownloadSpeedTester downloadSpeedTester,
-            IUploadSpeedTester uploadSpeedTester)
+            IUploadSpeedTester uploadSpeedTester,
+            ISpeedtestConfigurationProvider configurationProvider)
+            : base(configurationProvider)
         {
             _bestServerDeterminer = bestServerDeterminer;
             _downloadSpeedTester = downloadSpeedTester;
             _uploadSpeedTester = uploadSpeedTester;
+            _configurationProvider = configurationProvider;
         }
 
-        public void Execute()
-        {
-            while (true)
-            {
-                PerformSingleSpeedTest();
-                Thread.Sleep(TimeSpan.FromMinutes(5));
-            }
-        }
-
-        private void PerformSingleSpeedTest()
+        protected override void Run()
         {
             var bestServer = _bestServerDeterminer.GetBestServer().Result;
             var downSpeedMbps = _downloadSpeedTester.GetSpeedMbps(bestServer);

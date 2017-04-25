@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,6 +57,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\SpeedtestConfiguration.cs" />
+    <Compile Include="Configuration\SpeedtestConfigurationProvider.cs" />
+    <Compile Include="Infrastructure\ActionService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Infrastructure\ActionServiceRunner.cs" />
+    <Compile Include="Infrastructure\IService.cs" />
+    <Compile Include="Infrastructure\ThreadedActionService.cs" />
     <Compile Include="Query\HttpQueryExecutor.cs" />
     <Compile Include="Query\SpeedtestConfigQuery.cs" />
     <Compile Include="Infrastructure\IocBuilder.cs" />
@@ -66,7 +75,7 @@
     <Compile Include="Query\SpeedtestUploadQuery.cs" />
     <Compile Include="Services\BestServerDeterminer.cs" />
     <Compile Include="Services\DownloadSpeedTester.cs" />
-    <Compile Include="Services\Speedtester.cs" />
+    <Compile Include="Services\SpeedtestService.cs" />
     <Compile Include="Services\UploadSpeedTester.cs" />
     <Compile Include="Model\Location.cs" />
   </ItemGroup>
