@@ -12,7 +12,7 @@ namespace SpeedtestNetCli.Services
 
     public class SpeedtestService : ThreadedActionService, ISpeedtestService
     {
-        private static readonly ILog Log = LogManager.GetLogger(string.Empty);
+        private static readonly ILog Log = LogManager.GetLogger("Speedtest Service");
 
         private readonly IBestServerDeterminer _bestServerDeterminer;
         private readonly IDownloadSpeedTester _downloadSpeedTester;

@@ -1,13 +1,15 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
+using SpeedtestNetCli.Configuration;
 
 namespace SpeedtestNetCli.Query
 { 
     public interface IHttpQuery<T>
     {
-        Task<T> Execute(HttpClient client);
+        Task<T> Execute(HttpClient client, CancellationToken cancellationToken);
     }
 
     public interface IHttpQueryExecutor
@@ -17,6 +19,13 @@ namespace SpeedtestNetCli.Query
 
     public class HttpQueryExecutor : IHttpQueryExecutor
     {
+        private readonly CancellationToken _cancellationToken;
+
+        public HttpQueryExecutor(ISpeedtestConfigurationProvider configurationProvider)
+        {
+            _cancellationToken = configurationProvider.GetConfiguration().CancellationToken;
+        }
+
         public async Task<T> Execute<T>(IHttpQuery<T> query)
         {
             var httpHandler = new HttpClientHandler
@@ -32,7 +41,7 @@ namespace SpeedtestNetCli.Query
 
                 httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
-                return await query.Execute(httpClient);
+                return await query.Execute(httpClient, _cancellationToken);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpeedtestNetCli.Query
@@ -15,9 +16,9 @@ namespace SpeedtestNetCli.Query
             _payload = payload;
         }
 
-        public async Task<bool> Execute(HttpClient httpClient)
+        public async Task<bool> Execute(HttpClient httpClient, CancellationToken cancellationToken)
         {
-            var response = await httpClient.PostAsync($"{_url}?x={Guid.NewGuid()}", new StringContent(_payload));
+            var response = await httpClient.PostAsync($"{_url}?x={Guid.NewGuid()}", new StringContent(_payload), cancellationToken);
             return response.IsSuccessStatusCode;
         }
     }

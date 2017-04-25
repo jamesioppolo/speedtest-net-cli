@@ -9,7 +9,7 @@ namespace SpeedtestNetCli.Infrastructure
 {
     public abstract class ThreadedActionService : IService, IDisposable
     {
-        private static readonly ILog Log = LogManager.GetLogger("ThreadedActionService");
+        private static readonly ILog Log = LogManager.GetLogger("Speedtest Application");
 
         private readonly object _syncRoot = new object();
         private bool _isRunning;
