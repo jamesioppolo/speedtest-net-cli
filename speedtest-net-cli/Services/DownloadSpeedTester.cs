@@ -37,7 +37,7 @@ namespace SpeedtestNetCli.Services
 
         private static IEnumerable<string> GetImageUrls(XElement bestServer)
         {
-            var imageSizes = new List<string> {"1000", "2000" };
+            var imageSizes = new List<string> {"350", "500", "750", "1000", "1500" };
 
             var imageUrls = new List<string>();
 

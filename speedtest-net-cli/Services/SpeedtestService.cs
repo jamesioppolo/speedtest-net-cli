@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using log4net;
 using SpeedtestNetCli.Configuration;
 using SpeedtestNetCli.Infrastructure;
@@ -35,10 +33,10 @@ namespace SpeedtestNetCli.Services
 
         protected override void Run()
         {
-            while (true)
+            while (!_configurationProvider.GetConfiguration().CancellationToken.IsCancellationRequested)
             {
                 TryRunSpeedTest();
-                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
+                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(12));
             }
         }
 
