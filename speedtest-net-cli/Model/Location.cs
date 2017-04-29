@@ -7,15 +7,15 @@ namespace SpeedtestNetCli.Model
     {
         private const double earthRadiusKm = 6371;
 
+        public double Latitude { get; }
+        public double Longitude { get; }
+
         public Location(XElement node)
         {
             Latitude = Convert.ToDouble(node.Attribute("lat").Value);
             Longitude = Convert.ToDouble(node.Attribute("lon").Value);
         }
-
-        public double Latitude { get; }
-        public double Longitude { get; }
-
+        
         public double DistanceTo(Location otherLocation)
         {
             var dlat = Radians(otherLocation.Latitude - Latitude);
