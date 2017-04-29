@@ -36,12 +36,15 @@ namespace SpeedtestNetCli.Services
             if (_speedtestConfiguration.List)
             {
                 Log.Info("Please wait for retrieval of closest 20 servers...");
-                foreach (var server in _bestServerDeterminer.GetClosestServers(20).Result)
-                {
-                    Log.Info($"Distance={Convert.ToDouble(server.Attribute("clientDistance").Value):N2}km, " +
-                             $"{server.Attribute("host").Value} " +
-                             $"(ID={server.Attribute("id").Value})");
-                }
+                _bestServerDeterminer.GetClosestServers(20).Result.ForEach(server =>
+                        {
+                            Log.Info($"(ID={server.Attribute("id").Value}) " +
+                                     $"{server.Attribute("sponsor").Value} - " +
+                                     $"{server.Attribute("host").Value} " +
+                                     $"({server.Attribute("name").Value}, {server.Attribute("country").Value}) " +
+                                     $"[{Convert.ToDouble(server.Attribute("clientDistance").Value):N2} km]");
+                        }
+                    );
                 return;
             }
 
