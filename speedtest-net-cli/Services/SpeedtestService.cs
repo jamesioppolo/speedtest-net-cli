@@ -33,6 +33,9 @@ namespace SpeedtestNetCli.Services
 
         protected override void Run()
         {
+            if (_speedtestConfiguration.HelpRequested)
+                return;
+
             if (_speedtestConfiguration.List)
             {
                 Log.Info("Please wait for retrieval of closest 20 servers...");
@@ -41,7 +44,8 @@ namespace SpeedtestNetCli.Services
                             Log.Info($"(ID={server.Attribute("id").Value}) " +
                                      $"{server.Attribute("sponsor").Value} - " +
                                      $"{server.Attribute("host").Value} " +
-                                     $"({server.Attribute("name").Value}, {server.Attribute("country").Value}) " +
+                                     $"({server.Attribute("name").Value}, " +
+                                     $"{server.Attribute("country").Value}) " +
                                      $"[{Convert.ToDouble(server.Attribute("clientDistance").Value):N2} km]");
                         }
                     );
@@ -51,7 +55,7 @@ namespace SpeedtestNetCli.Services
             while (!_speedtestConfiguration.CancellationToken.IsCancellationRequested)
             {
                 TryRunSpeedTest();
-                _speedtestConfiguration.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(12));
+                _speedtestConfiguration.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(_speedtestConfiguration.IntervalMinutes));
             }
         }
 
