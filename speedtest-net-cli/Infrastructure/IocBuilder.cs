@@ -22,7 +22,7 @@ namespace SpeedtestNetCli.Infrastructure
             base.Load(builder);
 
             builder.RegisterType<SpeedtestService>().AsSelf();
-            builder.RegisterType<SpeedtestConfigurationProvider>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<SpeedtestConfiguration>().SingleInstance();
             builder.RegisterType<HttpQueryExecutor>().AsImplementedInterfaces();
             builder.RegisterType<BestServerDeterminer>().AsImplementedInterfaces();
             builder.RegisterType<DownloadSpeedTester>().AsImplementedInterfaces();

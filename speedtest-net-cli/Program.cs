@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using log4net.Config;
 using SpeedtestNetCli.Configuration;
 using SpeedtestNetCli.Infrastructure;
 using SpeedtestNetCli.Services;
+using CommandLine;
 
 namespace SpeedtestNetCli
 {
@@ -19,9 +21,9 @@ namespace SpeedtestNetCli
 
         private static void SetupCommandLineOptions(string[] args, IComponentContext container)
         {
-            var taskParametersProvider = container.Resolve<ISpeedtestConfigurationProvider>();
-            var config = new SpeedtestConfiguration();
-            taskParametersProvider.SetConfiguration(config);
+            var config = container.Resolve<SpeedtestConfiguration>();
+            if (args.Any())
+                Parser.Default.ParseArguments(args, config);
         }
 
         private static void StartSpeedtest(IComponentContext container)

@@ -16,27 +16,39 @@ namespace SpeedtestNetCli.Services
         private readonly IBestServerDeterminer _bestServerDeterminer;
         private readonly IDownloadSpeedTester _downloadSpeedTester;
         private readonly IUploadSpeedTester _uploadSpeedTester;
-        private readonly ISpeedtestConfigurationProvider _configurationProvider;
+        private readonly SpeedtestConfiguration _speedtestConfiguration;
 
         public SpeedtestService(
             IBestServerDeterminer bestServerDeterminer,
             IDownloadSpeedTester downloadSpeedTester,
             IUploadSpeedTester uploadSpeedTester,
-            ISpeedtestConfigurationProvider configurationProvider)
-            : base(configurationProvider)
+            SpeedtestConfiguration speedtestConfiguration)
+            : base(speedtestConfiguration)
         {
             _bestServerDeterminer = bestServerDeterminer;
             _downloadSpeedTester = downloadSpeedTester;
             _uploadSpeedTester = uploadSpeedTester;
-            _configurationProvider = configurationProvider;
+            _speedtestConfiguration = speedtestConfiguration;
         }
 
         protected override void Run()
         {
-            while (!_configurationProvider.GetConfiguration().CancellationToken.IsCancellationRequested)
+            if (_speedtestConfiguration.List)
+            {
+                Log.Info("Please wait for retrieval of closest 20 servers...");
+                foreach (var server in _bestServerDeterminer.GetClosestServers(20).Result)
+                {
+                    Log.Info($"Distance={Convert.ToDouble(server.Attribute("clientDistance").Value):N2}km, " +
+                             $"{server.Attribute("host").Value} " +
+                             $"(ID={server.Attribute("id").Value})");
+                }
+                return;
+            }
+
+            while (!_speedtestConfiguration.CancellationToken.IsCancellationRequested)
             {
                 TryRunSpeedTest();
-                _configurationProvider.GetConfiguration().CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(12));
+                _speedtestConfiguration.CancellationToken.WaitHandle.WaitOne(TimeSpan.FromMinutes(12));
             }
         }
 

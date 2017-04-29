@@ -21,9 +21,9 @@ namespace SpeedtestNetCli.Query
     {
         private readonly CancellationToken _cancellationToken;
 
-        public HttpQueryExecutor(ISpeedtestConfigurationProvider configurationProvider)
+        public HttpQueryExecutor(SpeedtestConfiguration speedtestConfiguration)
         {
-            _cancellationToken = configurationProvider.GetConfiguration().CancellationToken;
+            _cancellationToken = speedtestConfiguration.CancellationToken;
         }
 
         public async Task<T> Execute<T>(IHttpQuery<T> query)

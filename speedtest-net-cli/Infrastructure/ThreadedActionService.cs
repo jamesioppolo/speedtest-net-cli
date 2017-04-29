@@ -19,11 +19,11 @@ namespace SpeedtestNetCli.Infrastructure
         private CancellationTokenSource _cancellationTokenSource;
         private Task _task;
 
-        private readonly ISpeedtestConfigurationProvider _speedtestConfigurationProvider;
+        private readonly SpeedtestConfiguration _speedtestConfiguration;
 
-        protected ThreadedActionService(ISpeedtestConfigurationProvider speedtestConfigurationProvider)
+        protected ThreadedActionService(SpeedtestConfiguration speedtestConfiguration)
         {
-            _speedtestConfigurationProvider = speedtestConfigurationProvider;
+            _speedtestConfiguration = speedtestConfiguration;
         }
 
         public void Start()
@@ -81,7 +81,7 @@ namespace SpeedtestNetCli.Infrastructure
             }
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _speedtestConfigurationProvider.GetConfiguration().CancellationToken = _cancellationTokenSource.Token;
+            _speedtestConfiguration.CancellationToken = _cancellationTokenSource.Token;
             _task = new Task(
                 Run,
                 _cancellationTokenSource.Token,

@@ -12,6 +12,7 @@ namespace SpeedtestNetCli.Services
     public interface IBestServerDeterminer
     {
         Task<XElement> GetBestServer();
+        Task<List<XElement>> GetClosestServers(int number);
     }
 
     public class BestServerDeterminer : IBestServerDeterminer
@@ -23,7 +24,7 @@ namespace SpeedtestNetCli.Services
             _httpExecutor = httpExecutor;
         }
 
-        public async Task<XElement> GetBestServer()
+        public async Task<List<XElement>> GetClosestServers(int number)
         {
             var client = await _httpExecutor().Execute(new SpeedtestConfigQuery());
             var servers = await _httpExecutor().Execute(new SpeedtestServerQuery());
@@ -34,12 +35,15 @@ namespace SpeedtestNetCli.Services
                 server.Add(new XAttribute("clientDistance", clientLocation.DistanceTo(new Location(server))));
             }
 
-            var closestServers = servers.Descendants("server")
+            return servers.Descendants("server")
                 .OrderBy(server => Convert.ToDouble(server.Attribute("clientDistance").Value))
-                .Take(5)
+                .Take(number)
                 .ToList();
+        }
 
-            return GetLowestLatencyServerFrom(closestServers);
+        public async Task<XElement> GetBestServer()
+        {
+            return GetLowestLatencyServerFrom(await GetClosestServers(5));
         }
 
         private static XElement GetLowestLatencyServerFrom(IList<XElement> closestServers)
